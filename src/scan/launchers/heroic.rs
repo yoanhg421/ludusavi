@@ -1,5 +1,6 @@
 pub mod gog;
 pub mod legendary;
+pub mod sideloaded;
 
 use std::collections::HashMap;
 
@@ -41,6 +42,7 @@ pub fn scan(
 
     games.extend(legendary::scan(root, title_finder, legendary));
     games.extend(gog::scan(root, title_finder));
+    games.extend(sideloaded::scan(root, title_finder));
 
     games
 }

@@ -2,7 +2,7 @@ use std::env;
 
 use crate::{
     resource::{config::RootsConfig, manifest::Store},
-    scan::heroic::{gog, legendary},
+    scan::heroic::{gog, legendary, sideloaded},
     wrap::WrapGameInfo,
 };
 
@@ -34,8 +34,12 @@ fn find_in_roots(roots: &[RootsConfig], game_id: &str, game_runner: &str) -> Opt
                     None
                 }
                 "sideload" => {
-                    log::debug!("Ignoring Heroic game with unsupported runner 'sideload'.");
-                    None
+                    return sideloaded::get_library(root)
+                        .iter()
+                        .find_map(|g| match g.app_name == *game_id {
+                            true => Some(g.title.clone()),
+                            false => None,
+                        })
                 }
                 value => {
                     log::debug!("Ignoring Heroic game with unknown runner '{}'.", value);
